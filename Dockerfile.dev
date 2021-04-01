@@ -1,0 +1,50 @@
+FROM node:alpine
+ 
+USER node
+#The USER instruction sets the user name (or UID) 
+#The node user is executing the following
+RUN mkdir -p /home/node/app
+#create a directory of home/node/app and give it permissions
+#to be used by WORKDIR
+WORKDIR /home/node/app
+ 
+COPY --chown=node:node ./package.json ./
+#The inline chown commands will set ownership of the files you are copying
+#from your local environment to the node user in the container.
+#The end result will be that all files
+#and directories in the project will no longer be owned
+#by root and will instead be owned by the node user.
+RUN npm install
+ 
+COPY --chown=node:node ./ ./
+CMD ["npm", "start"]
+
+# To build the container from this Dockerfile
+# enter the command docker build -f Dockerfile.dev .
+# docker run -it -p 3000:3000 IMAGE_ID
+
+#docker-compose method
+#refer to the docker-compose file
+#to build and run: docker-compose up --build
+
+#Hotloading the test files
+# One way is to attach to the existing container
+#
+#he didn't create containers using docker-compose.yml file. instead,
+#he created image using dockerfile (docker build -f Dockerfile.dev .) and later he ran command of docker run.
+#(docker run -it <container id> npm run test )and in that command,
+#he didn't use -v parameter, so the changes made in local directory didn't reflect inside container.
+
+#work around 1
+#docker-compose up
+#The docker exec command runs a new command in a running container.
+#The -it flag creates a pseudo terminal to send commands
+#docker exec -it <container id> npm run test
+
+#work around 2
+# go to docker-compose.yml
+#docker-composeup --build test
+
+#work around 3
+#no need to add separate service in docker-compose.yml
+#docker-compose exec <container tag> npm run test

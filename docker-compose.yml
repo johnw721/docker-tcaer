@@ -1,0 +1,39 @@
+version: '3'
+services:
+  web:
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true
+    build:
+# The  context digs into the desired directory,
+#which in this case is the current one(.)
+      context: .
+# dockerfile specifies which dockerfile to grab
+#to build this image
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+# the -v accesses the volume feature of Docker
+#volumes grant the user the ability
+#to see the effects of changes to a file inside
+#the container w/o having to rebuild every time
+    volumes:
+# tells docker volume to not reference this file
+      - /home/node/app/node_modules
+# copy the current outer directory into the current container
+#directory under the folder named app
+      - .:/home/node/app
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /home/node/app/node_modules
+      - .:/home/node/app
+#opens a standard in to receive
+    stdin_open: true
+#sets a pseudo terminal. Alongside stdin_open this
+#basically performs the function of -it flag
+    tty: true
+# command overrides the default command in Dockerfile.dev
+    command: ["npm","run","test"]
