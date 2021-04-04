@@ -24,6 +24,5 @@ deploy:
   bucket_path: "docker-tcaer"
   on:
     branch: main
-
   access_key_id: $Access_Docker
   secret_access_key: $Secret_Docker
