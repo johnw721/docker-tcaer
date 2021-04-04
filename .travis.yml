@@ -1,0 +1,12 @@
+sudo: require
+# super user permission require
+language: generic
+services:
+  - docker
+#Automatically installs a copy of docker
+before_install:
+#series of command to run before project is deployed
+#before test are ran
+  - docker build -t johnwalker/docker-tcaer -f Dockerfile.dev .
+script:
+  - docker run -e CI=true johnwalker/docker-tcaer npm run test
