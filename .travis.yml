@@ -10,3 +10,20 @@ before_install:
   - docker build -t johnwalker/docker-tcaer -f Dockerfile.dev .
 script:
   - docker run -e CI=true johnwalker/docker-tcaer npm run test
+deploy:
+#Hosting Provider
+  provider: elasticbeanstalk
+# region of the app
+  region: "us-east-1"
+#App name
+  app: "docker-tcaer"
+#Name of environment
+  env: "Dockertcaer-env"
+#Can be found via s3 section of aws
+  bucket_name: "elasticbeanstalk-us-east-1-994537965397"
+  bucket_path: "docker-tcaer"
+  on:
+    branch: main
+
+  access_key_id: $Access_Docker
+  secret_access_key: $Secret_Docker

@@ -31,6 +31,10 @@ RUN npm run build
 
 #This is the run phase
 FROM nginx
+#Running this within a docker container means nothing.
+#It's only when AWS SERVICE(Elastic Bean Stalk) reads this expose command that something happens
+#BeanStalk will now automatically map to port 8080
+EXPOSE 80
 #--from=-0 means copy from the first step
 #the folder destination to pull from is then specified
 #copy over to the nginx file that ctually serves up
